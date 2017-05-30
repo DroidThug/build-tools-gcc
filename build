@@ -73,6 +73,7 @@ for arg in "$@"; do
     "--linaro")   set -- "$@" "-l" ;;
     "--no-tmpfs") set -- "$@" "-n" ;;
     "--update")   set -- "$@" "-u" ;;
+    "--no-compress") NO_COMPRESS=true ;;
     *)            set -- "$@" "$arg"
   esac
 done
@@ -336,12 +337,13 @@ elif [[ $( grep -i "Arch" /etc/os-release ) ]]; then
 	DISTRO=-arch
 fi
 
-echoText "PACKAGING TOOLCHAIN"
+if [ ${NO_COMPRESS} == 'true' ]; then
+    echoText "PACKAGING TOOLCHAIN"
 
-echo "Target file: ${TARGET}-${TAG}${DISTRO}.tar.xz"
-echo "Packaging..."
-XZ_OPT=-9 tar cJf ${TARGET}-${TAG}${DISTRO}.tar.xz ${TARGET}
-
+    echo "Target file: ${TARGET}-${TAG}${DISTRO}.tar.xz"
+    echo "Packaging..."
+    XZ_OPT=-9 tar cJf ${TARGET}-${TAG}${DISTRO}.tar.xz ${TARGET}
+fi
 
 #################
 # ENDING OUTPUT #
